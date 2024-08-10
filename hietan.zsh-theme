@@ -9,7 +9,6 @@ COLOR_BAR=black
 
 # Status
 STATUS=$'%(?.%F{green}\Uf05e0.%F{red}\Uf0159)%f'
-
 # Time
 TIME_ICON=$'\Uf0954'
 TIME="${TIME_ICON} %D{%Y-%m-%d %H:%M:%S}"
@@ -41,16 +40,43 @@ GIT='$(git_prompt_info)$(git_prompt_status)'
 
 # Anaconda (Option)
 ANACONDA_ICON=$'\Uf0320'
-precmd () {
+function anaconda_env_name {
 	if [[ -n $CONDA_DEFAULT_ENV ]]; then
-		psvar[1]=" ${SPLITTER} ${ANACONDA_ICON} $CONDA_DEFAULT_ENV"
-	else
-		psvar[1]=""
+		echo " ${SPLITTER} ${ANACONDA_ICON} $CONDA_DEFAULT_ENV"
 	fi
 }
-ANACONDA='%1v'
+ANACONDA='$ANACONDA_ICON $(anaconda_env_name)'
+
+# npm (Option)
+JS_ICON=$'\Uf031e'
+function npm_project_name {
+  local dir=$(pwd)
+  while [ "$dir" != "/" ]; do
+    if [ -f "$dir/package.json" ]; then
+      echo "($(node -p "require('$dir/package.json').name"))"
+      return
+    fi
+    dir=$(dirname "$dir")
+  done
+}
+JS='$JS_ICON $(npm_project_name)'
+
+# cargo (Option)
+RUST_ICON=$'\Uf1617'
+function cargo_project_name {
+	local dir=$(pwd)
+	while [ "$dir" != "/" ]; do
+		if [ -f "$dir/Cargo.toml" ]; then
+			echo "($(cat $dir/Cargo.toml | grep -oP '(?<=name = ").*(?=")'))"
+			return
+		fi
+		dir=$(dirname "$dir")
+	done
+}
+RUST='$RUST_ICON $(cargo_project_name)'
+
 
 PROMPT="
-%K{${COLOR_BAR}} ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}}%B ${TIME} ${SPLITTER} ${DIRECTORY}${GIT}${ANACONDA} %f%b%K{${COLOR_BAR}}%E
+%K{${COLOR_BAR}} ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}}%B ${TIME} ${SPLITTER} ${DIRECTORY}${GIT}${ANACONDA}${JS}${RUST} %f%b%K{${COLOR_BAR}}%E
  ${START} %f%k"
 RPROMPT='%F{${COLOR_BACKGROUND}}%n@%m%f'
