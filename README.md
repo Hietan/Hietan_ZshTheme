@@ -1,6 +1,6 @@
 # Hietan's ZshTheme
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub Release](https://img.shields.io/github/v/release/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/releases)
 [![GitHub Issues](https://img.shields.io/github/issues/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/issues)
 [![GitHub Forks](https://img.shields.io/github/forks/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/network/members)
