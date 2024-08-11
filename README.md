@@ -45,7 +45,32 @@ This theme also supports the following applications:
 
 ## Installation
 
+To install the Hietan Zsh Theme, follow these steps:
+
 1. **Clone the repository**:
 
    ```sh
    git clone https://github.com/Hietan/Hietan_ZshTheme.git
+   ```
+
+2. **Create a symbolic link to the theme in the Oh My Zsh themes directory**:
+
+   ```sh
+   ln -s $(pwd)/Hietan_ZshTheme/hietan.zsh-theme ~/.oh-my-zsh/themes/hietan.zsh-theme
+   ```
+
+3. **Set the theme to `hietan` in your `.zshrc`**:
+
+   Open your `.zshrc` file in a text editor and modify the `ZSH_THEME` line:
+
+   ```sh
+   ZSH_THEME="hietan"
+   ```
+
+4. **Reload your Zsh configuration**:
+
+   ```sh
+   source ~/.zshrc
+   ```
+
+After completing these steps, the Hietan Zsh Theme should be active in your terminal.
