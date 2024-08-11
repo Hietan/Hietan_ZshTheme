@@ -1,3 +1,15 @@
+#
+# Hietan Zsh Theme
+# Version: 1.1.0
+#
+# Author: Hietan
+# Email: hietan@example.com
+# GitHub Repository: https://github.com/Hietan/Hietan_ZshTheme
+# License: MIT
+# 
+# © 2024 Hietan
+#
+
 # Generic function to retrieve the project name
 # $1: Project definition file name (e.g., package.json, Cargo.toml)
 # $2: Regular expression to extract the project name
