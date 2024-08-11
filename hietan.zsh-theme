@@ -53,7 +53,7 @@ function npm_project_name {
   local dir=$(pwd)
   while [ "$dir" != "/" ]; do
     if [ -f "$dir/package.json" ]; then
-      echo "($(node -p "require('$dir/package.json').name"))"
+			echo "($(cat $dir/package.json | grep -oP '(?<=name": ").*(?=")'))"
       return
     fi
     dir=$(dirname "$dir")
