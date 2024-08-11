@@ -14,7 +14,7 @@ The theme offers icons, time, directory information, status indicators, and proj
 
 ## Features
 
-![Thems's Screenshot](/Screenshot.png)
+![Thems's Screenshot](https://github.com/user-attachments/assets/126739ff-f537-4305-a7d6-e9f81d8b66ce)
 
 - Display blow informations with icon
   - Status indicators
