@@ -1,11 +1,11 @@
 #
 # Hietan Zsh Theme
-# Version: 1.1.0
+# Version: 1.1.1
 #
 # Author: Hietan
 # Email: hietan@example.com
 # GitHub Repository: https://github.com/Hietan/Hietan_ZshTheme
-# License: MIT
+# License: Apache Licence 2.0
 # 
 # © 2024 Hietan
 #
