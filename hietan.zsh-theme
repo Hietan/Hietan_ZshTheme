@@ -20,7 +20,7 @@ function project_name {
 
 	while [ "$dir" != "/" ]; do
 		if [ -f "$dir/$filename" ]; then
-			echo "$(grep -oP "$regex" "$dir/$filename")"
+      echo "$(grep -o "$regex" "$dir/$filename" | sed -E 's/.*"([^"]+)".*/\1/')"
 			return
 		fi
 		dir=$(dirname "$dir")
@@ -126,13 +126,13 @@ precmd() {
 	ANACONDA_NAME=$(anaconda_env_name)
 	ANACONDA=$(update_name "$ANACONDA_ICON" "$ANACONDA_NAME")
 
-	NPM_NAME=$(project_name "package.json" '(?<=name": ").*(?=")')
+	NPM_NAME=$(project_name "package.json" '"name": "[^"]*"')
 	NPM=$(update_name "$NPM_ICON" "$NPM_NAME")
 
-	CARGO_NAME=$(project_name "Cargo.toml" '(?<=name = ").*(?=")')
+	CARGO_NAME=$(project_name "Cargo.toml" 'name\s*=\s*"[^"]*"')
 	CARGO=$(update_name "$CARGO_ICON" "$CARGO_NAME")
 
-	RYE_NAME=$(project_name "pyproject.toml" '(?m)^\s*name\s*=\s*"\K[^"]+')
+	RYE_NAME=$(project_name "pyproject.toml" '^\s*name\s*=\s*"[^"]*"')
 	RYE=$(update_name "$RYE_ICON" "$RYE_NAME")
 
 # Prompt
