@@ -70,12 +70,12 @@ SPLITTER=$'\Uf01d9'
 START=$'\uf460'
 
 # Colors
-COLOR_TEXT=black
-COLOR_BACKGROUND=242
-COLOR_BAR=black
+COLOR_TEXT='#000000'
+COLOR_BACKGROUND='#6c6c6c'
+COLOR_BAR='#000000'
 
 # Status
-STATUS=$'%(?.%F{green}\Uf05e0.%F{red}\Uf0159)%f'
+STATUS=$'%(?.%F{#00cd00}\Uf05e0.%F{#cd0000}\Uf0159)%f'
 
 # Time
 TIME_ICON=$'\Uf0954'
