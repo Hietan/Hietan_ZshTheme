@@ -70,8 +70,15 @@ SPLITTER=$'\Uf01d9'
 START=$'\uf460'
 
 # Color scheme
-# Set HIETAN_COLOR_SCHEME to "dark" or "light" before loading the theme.
-HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
+# Codex takes priority if both environment variables are present.
+if [[ ${CODEX_SHELL:-} == 1 ]]; then
+  HIETAN_COLOR_SCHEME=light
+elif [[ ${TERM_PROGRAM:-} == iTerm.app ]]; then
+  HIETAN_COLOR_SCHEME=dark
+else
+  # Set this to "dark" or "light" before loading the theme to override the default.
+  HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
+fi
 
 # Dark color palette
 COLOR_DARK_TEXT='#000000'
