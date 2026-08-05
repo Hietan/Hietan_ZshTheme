@@ -13,7 +13,7 @@
 # Generic function to retrieve the project name
 # $1: Project definition file name (e.g., package.json, Cargo.toml)
 # $2: Regular expression to extract the project name
-function project_name {
+function hietan_project_name {
 	local filename=$1
 	local regex=$2
 	local dir=$(pwd)
@@ -30,7 +30,7 @@ function project_name {
 # Combines an icon with a name if the name is not empty.
 # $1: Icon
 # $2: Name
-function update_name {
+function hietan_update_name {
   local icon=$1
   local name=$2
 
@@ -42,10 +42,11 @@ function update_name {
 }
 
 # Constructs a prompt string by concatenating items passed as arguments.
-# Each item is separated by the SPLITTER symbol except the first item.
+# Each item is separated by the HIETAN_SPLITTER symbol except the first item.
 # $@: Items to be concatenated
-function echo_prompt {
+function hietan_echo_prompt {
 	local items=("$@")
+	local item
 	local prompt=""
 	local first=true
 
@@ -57,7 +58,7 @@ function echo_prompt {
 			prompt+="${(P)item}"
 			first=false
 		else
-			prompt+=" ${SPLITTER} "
+			prompt+=" ${HIETAN_SPLITTER} "
 			prompt+="${(P)item}"
 		fi
 	done
@@ -66,10 +67,10 @@ function echo_prompt {
 }
 
 # Characters
-SPLITTER=$'\Uf01d9'
-START=$'\uf460'
-STATUS_SUCCESS_ICON=$'\Uf0e1e'
-STATUS_ERROR_ICON=$'\Uf1398'
+HIETAN_SPLITTER=$'\Uf01d9'
+HIETAN_START=$'\uf460'
+HIETAN_STATUS_SUCCESS_ICON=$'\Uf0e1e'
+HIETAN_STATUS_ERROR_ICON=$'\Uf1398'
 
 # Color scheme
 # Codex takes priority if both environment variables are present.
@@ -83,38 +84,38 @@ else
 fi
 
 # Dark color palette
-COLOR_DARK_TEXT='#000000'
-COLOR_DARK_BACKGROUND='#808080'
-COLOR_DARK_BAR='#000000'
-COLOR_DARK_PROMPT='#ffffff'
-COLOR_DARK_STATUS_SUCCESS='#008700'
-COLOR_DARK_STATUS_ERROR='#c33126'
+HIETAN_COLOR_DARK_TEXT='#000000'
+HIETAN_COLOR_DARK_BACKGROUND='#808080'
+HIETAN_COLOR_DARK_BAR='#000000'
+HIETAN_COLOR_DARK_PROMPT='#ffffff'
+HIETAN_COLOR_DARK_STATUS_SUCCESS='#008700'
+HIETAN_COLOR_DARK_STATUS_ERROR='#c33126'
 
 # Light color palette
-COLOR_LIGHT_TEXT='#ffffff'
-COLOR_LIGHT_BACKGROUND='#585858'
-COLOR_LIGHT_BAR='#e0e0e0'
-COLOR_LIGHT_PROMPT='#000000'
-COLOR_LIGHT_STATUS_SUCCESS='#008700'
-COLOR_LIGHT_STATUS_ERROR='#d70000'
+HIETAN_COLOR_LIGHT_TEXT='#ffffff'
+HIETAN_COLOR_LIGHT_BACKGROUND='#585858'
+HIETAN_COLOR_LIGHT_BAR='#e0e0e0'
+HIETAN_COLOR_LIGHT_PROMPT='#000000'
+HIETAN_COLOR_LIGHT_STATUS_SUCCESS='#008700'
+HIETAN_COLOR_LIGHT_STATUS_ERROR='#d70000'
 
 function hietan_set_color_scheme {
   case "$HIETAN_COLOR_SCHEME" in
     light)
-      COLOR_TEXT=$COLOR_LIGHT_TEXT
-      COLOR_BACKGROUND=$COLOR_LIGHT_BACKGROUND
-      COLOR_BAR=$COLOR_LIGHT_BAR
-      COLOR_PROMPT=$COLOR_LIGHT_PROMPT
-      COLOR_STATUS_SUCCESS=$COLOR_LIGHT_STATUS_SUCCESS
-      COLOR_STATUS_ERROR=$COLOR_LIGHT_STATUS_ERROR
+      HIETAN_COLOR_TEXT=$HIETAN_COLOR_LIGHT_TEXT
+      HIETAN_COLOR_BACKGROUND=$HIETAN_COLOR_LIGHT_BACKGROUND
+      HIETAN_COLOR_BAR=$HIETAN_COLOR_LIGHT_BAR
+      HIETAN_COLOR_PROMPT=$HIETAN_COLOR_LIGHT_PROMPT
+      HIETAN_COLOR_STATUS_SUCCESS=$HIETAN_COLOR_LIGHT_STATUS_SUCCESS
+      HIETAN_COLOR_STATUS_ERROR=$HIETAN_COLOR_LIGHT_STATUS_ERROR
       ;;
     dark)
-      COLOR_TEXT=$COLOR_DARK_TEXT
-      COLOR_BACKGROUND=$COLOR_DARK_BACKGROUND
-      COLOR_BAR=$COLOR_DARK_BAR
-      COLOR_PROMPT=$COLOR_DARK_PROMPT
-      COLOR_STATUS_SUCCESS=$COLOR_DARK_STATUS_SUCCESS
-      COLOR_STATUS_ERROR=$COLOR_DARK_STATUS_ERROR
+      HIETAN_COLOR_TEXT=$HIETAN_COLOR_DARK_TEXT
+      HIETAN_COLOR_BACKGROUND=$HIETAN_COLOR_DARK_BACKGROUND
+      HIETAN_COLOR_BAR=$HIETAN_COLOR_DARK_BAR
+      HIETAN_COLOR_PROMPT=$HIETAN_COLOR_DARK_PROMPT
+      HIETAN_COLOR_STATUS_SUCCESS=$HIETAN_COLOR_DARK_STATUS_SUCCESS
+      HIETAN_COLOR_STATUS_ERROR=$HIETAN_COLOR_DARK_STATUS_ERROR
       ;;
     *)
       echo "hietan: unknown color scheme '$HIETAN_COLOR_SCHEME'; using dark" >&2
@@ -123,22 +124,22 @@ function hietan_set_color_scheme {
       ;;
   esac
 
-  STATUS="%(?.%F{${COLOR_TEXT}}%K{${COLOR_STATUS_SUCCESS}} ${STATUS_SUCCESS_ICON} .%F{${COLOR_TEXT}}%K{${COLOR_STATUS_ERROR}} ${STATUS_ERROR_ICON} )%f"
+  HIETAN_STATUS="%(?.%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_STATUS_SUCCESS}} ${HIETAN_STATUS_SUCCESS_ICON} .%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_STATUS_ERROR}} ${HIETAN_STATUS_ERROR_ICON} )%f"
 }
 
 hietan_set_color_scheme
 
 # Time
-TIME_ICON=$'\Uf0954'
-TIME="${TIME_ICON} %D{%Y-%m-%d %H:%M:%S}"
+HIETAN_TIME_ICON=$'\Uf0954'
+HIETAN_TIME="${HIETAN_TIME_ICON} %D{%Y-%m-%d %H:%M:%S}"
 
 # Directory
-DIRECTORY_ICON=$'\Uf024b'
-DIRECTORY="${DIRECTORY_ICON} %~"
+HIETAN_DIRECTORY_ICON=$'\Uf024b'
+HIETAN_DIRECTORY="${HIETAN_DIRECTORY_ICON} %~"
 
 # Git (Option)
-GIT_ICON=$'\Uf02a2'
-ZSH_THEME_GIT_PROMPT_PREFIX="${SPLITTER} ${GIT_ICON} "
+HIETAN_GIT_ICON=$'\Uf02a2'
+ZSH_THEME_GIT_PROMPT_PREFIX="${HIETAN_SPLITTER} ${HIETAN_GIT_ICON} "
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
 ZSH_THEME_GIT_PROMPT_DIRTY=" \Uf0590"
 ZSH_THEME_GIT_PROMPT_CLEAN=" \ue30d"
@@ -152,43 +153,46 @@ ZSH_THEME_GIT_PROMPT_AHEAD=" \uf432"
 ZSH_THEME_GIT_PROMPT_BEHIND=" \uf434"
 ZSH_THEME_GIT_PROMPT_DIVERGED=" \ue728"
 ZSH_THEME_GIT_PROMPT_STASHED=" \Uf0613"
-GIT='$(git_prompt_info)$(git_prompt_status)'
+HIETAN_GIT='$(git_prompt_info)$(git_prompt_status)'
 
 # Anaconda (Option)
-function anaconda_env_name {
-	if [[ -n $CONDA_DEFAULT_ENV ]]; then
-		echo "${ANACONDA_ICON} $CONDA_DEFAULT_ENV"
+function hietan_anaconda_env_name {
+	if [[ -n ${CONDA_DEFAULT_ENV:-} ]]; then
+		echo "$CONDA_DEFAULT_ENV"
 	fi
 }
-ANACONDA_ICON=$'\Uf0320'
+HIETAN_ANACONDA_ICON=$'\Uf0320'
 
 # Rye (Option)
-RYE_ICON=$'\Uf0320'
+HIETAN_RYE_ICON=$'\Uf0320'
 
 # npm (Option)
-NPM_ICON=$'\Uf031e'
+HIETAN_NPM_ICON=$'\Uf031e'
 
 # Cargo (Option)
-CARGO_ICON=$'\Uf1617'
+HIETAN_CARGO_ICON=$'\Uf1617'
 
 # Precommand
-ITEMS=(TIME DIRECTORY ANACONDA RYE NPM CARGO)
-precmd() {
-	ANACONDA_NAME=$(anaconda_env_name)
-	ANACONDA=$(update_name "$ANACONDA_ICON" "$ANACONDA_NAME")
+HIETAN_ITEMS=(HIETAN_TIME HIETAN_DIRECTORY HIETAN_ANACONDA HIETAN_RYE HIETAN_NPM HIETAN_CARGO)
+function hietan_precmd {
+	HIETAN_ANACONDA_NAME=$(hietan_anaconda_env_name)
+	HIETAN_ANACONDA=$(hietan_update_name "$HIETAN_ANACONDA_ICON" "$HIETAN_ANACONDA_NAME")
 
-	NPM_NAME=$(project_name "package.json" '"name": "[^"]*"')
-	NPM=$(update_name "$NPM_ICON" "$NPM_NAME")
+	HIETAN_NPM_NAME=$(hietan_project_name "package.json" '"name": "[^"]*"')
+	HIETAN_NPM=$(hietan_update_name "$HIETAN_NPM_ICON" "$HIETAN_NPM_NAME")
 
-	CARGO_NAME=$(project_name "Cargo.toml" 'name\s*=\s*"[^"]*"')
-	CARGO=$(update_name "$CARGO_ICON" "$CARGO_NAME")
+	HIETAN_CARGO_NAME=$(hietan_project_name "Cargo.toml" 'name\s*=\s*"[^"]*"')
+	HIETAN_CARGO=$(hietan_update_name "$HIETAN_CARGO_ICON" "$HIETAN_CARGO_NAME")
 
-	RYE_NAME=$(project_name "pyproject.toml" '^\s*name\s*=\s*"[^"]*"')
-	RYE=$(update_name "$RYE_ICON" "$RYE_NAME")
+	HIETAN_RYE_NAME=$(hietan_project_name "pyproject.toml" '^\s*name\s*=\s*"[^"]*"')
+	HIETAN_RYE=$(hietan_update_name "$HIETAN_RYE_ICON" "$HIETAN_RYE_NAME")
 
 # Prompt
 PROMPT="
-%K{${COLOR_BAR}}%B${STATUS}%F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}} $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
-%F{${COLOR_PROMPT}}${START}%f%k "
-RPROMPT='%F{${COLOR_BACKGROUND}}%n@%m%f'
+%K{${HIETAN_COLOR_BAR}}%B${HIETAN_STATUS}%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_BACKGROUND}} $(hietan_echo_prompt "${HIETAN_ITEMS[@]}") ${HIETAN_GIT} %f%b%K{${HIETAN_COLOR_BAR}}%E
+%F{${HIETAN_COLOR_PROMPT}}${HIETAN_START}%f%k "
+RPROMPT='%F{${HIETAN_COLOR_BACKGROUND}}%n@%m%f'
 }
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd hietan_precmd
