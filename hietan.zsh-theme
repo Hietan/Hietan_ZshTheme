@@ -71,6 +71,12 @@ START=$'\uf460'
 STATUS_SUCCESS_ICON=$'\uf058'
 STATUS_ERROR_ICON=$'\uf057'
 
+# Font Awesome status icons can overflow a character cell in the Codex terminal.
+if [[ ${CODEX_SHELL:-} == 1 ]]; then
+  STATUS_SUCCESS_ICON=$'\u2713'
+  STATUS_ERROR_ICON=$'\u2717'
+fi
+
 # Color scheme
 # Codex takes priority if both environment variables are present.
 if [[ ${CODEX_SHELL:-} == 1 ]]; then
