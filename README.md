@@ -82,8 +82,6 @@ To install the Hietan Zsh Theme, follow these steps:
    ```
 
    Available values are `dark` and `light`.
-   Codex also uses standard Unicode status symbols to prevent Nerd Font status
-   icons from being clipped by its fixed character-cell spacing.
 
 4. **Reload your Zsh configuration**:
 
