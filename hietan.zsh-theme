@@ -68,8 +68,8 @@ function echo_prompt {
 # Characters
 SPLITTER=$'\Uf01d9'
 START=$'\uf460'
-STATUS_SUCCESS_ICON=$'\Uf012c'
-STATUS_ERROR_ICON=$'\Uf0156'
+STATUS_SUCCESS_ICON=$'\Uf0e1e'
+STATUS_ERROR_ICON=$'\Uf1398'
 
 # Color scheme
 # Codex takes priority if both environment variables are present.
