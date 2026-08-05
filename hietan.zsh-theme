@@ -69,13 +69,55 @@ function echo_prompt {
 SPLITTER=$'\Uf01d9'
 START=$'\uf460'
 
-# Colors
-COLOR_TEXT='#000000'
-COLOR_BACKGROUND='#808080'
-COLOR_BAR='#000000'
+# Color scheme
+# Set HIETAN_COLOR_SCHEME to "dark" or "light" before loading the theme.
+HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
 
-# Status
-STATUS=$'%(?.%F{#00cd00}\uf058.%F{#cd0000}\uf057)%f'
+# Dark color palette
+COLOR_DARK_TEXT='#000000'
+COLOR_DARK_BACKGROUND='#808080'
+COLOR_DARK_BAR='#000000'
+COLOR_DARK_PROMPT='#ffffff'
+COLOR_DARK_STATUS_SUCCESS='#00cd00'
+COLOR_DARK_STATUS_ERROR='#cd0000'
+
+# Light color palette
+COLOR_LIGHT_TEXT='#ffffff'
+COLOR_LIGHT_BACKGROUND='#585858'
+COLOR_LIGHT_BAR='#d0d0d0'
+COLOR_LIGHT_PROMPT='#000000'
+COLOR_LIGHT_STATUS_SUCCESS='#008700'
+COLOR_LIGHT_STATUS_ERROR='#d70000'
+
+function hietan_set_color_scheme {
+  case "$HIETAN_COLOR_SCHEME" in
+    light)
+      COLOR_TEXT=$COLOR_LIGHT_TEXT
+      COLOR_BACKGROUND=$COLOR_LIGHT_BACKGROUND
+      COLOR_BAR=$COLOR_LIGHT_BAR
+      COLOR_PROMPT=$COLOR_LIGHT_PROMPT
+      COLOR_STATUS_SUCCESS=$COLOR_LIGHT_STATUS_SUCCESS
+      COLOR_STATUS_ERROR=$COLOR_LIGHT_STATUS_ERROR
+      ;;
+    dark)
+      COLOR_TEXT=$COLOR_DARK_TEXT
+      COLOR_BACKGROUND=$COLOR_DARK_BACKGROUND
+      COLOR_BAR=$COLOR_DARK_BAR
+      COLOR_PROMPT=$COLOR_DARK_PROMPT
+      COLOR_STATUS_SUCCESS=$COLOR_DARK_STATUS_SUCCESS
+      COLOR_STATUS_ERROR=$COLOR_DARK_STATUS_ERROR
+      ;;
+    *)
+      echo "hietan: unknown color scheme '$HIETAN_COLOR_SCHEME'; using dark" >&2
+      HIETAN_COLOR_SCHEME=dark
+      hietan_set_color_scheme
+      ;;
+  esac
+
+  STATUS="%(?.%F{${COLOR_STATUS_SUCCESS}}\uf058.%F{${COLOR_STATUS_ERROR}}\uf057)%f"
+}
+
+hietan_set_color_scheme
 
 # Time
 TIME_ICON=$'\Uf0954'
@@ -138,6 +180,6 @@ precmd() {
 # Prompt
 PROMPT="
 %K{${COLOR_BAR}} ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}}%B $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
-${START} %f%k"
+%F{${COLOR_PROMPT}}${START} %f%k"
 RPROMPT='%F{${COLOR_BACKGROUND}}%n@%m%f'
 }

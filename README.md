@@ -67,6 +67,18 @@ To install the Hietan Zsh Theme, follow these steps:
    ZSH_THEME="hietan"
    ```
 
+   The dark color scheme is used by default. To use the theme on a light
+   terminal background, set `HIETAN_COLOR_SCHEME` before `ZSH_THEME`:
+
+   ```sh
+   HIETAN_COLOR_SCHEME="light"
+   ZSH_THEME="hietan"
+   ```
+
+   Available values are `dark` and `light`. You can set this environment
+   variable per terminal profile, allowing iTerm to use `dark` while Codex
+   uses `light`.
+
 4. **Reload your Zsh configuration**:
 
    ```sh
