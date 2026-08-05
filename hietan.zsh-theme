@@ -68,6 +68,8 @@ function echo_prompt {
 # Characters
 SPLITTER=$'\Uf01d9'
 START=$'\uf460'
+STATUS_SUCCESS_ICON=$'\uf058'
+STATUS_ERROR_ICON=$'\uf057'
 
 # Color scheme
 # Codex takes priority if both environment variables are present.
@@ -121,7 +123,7 @@ function hietan_set_color_scheme {
       ;;
   esac
 
-  STATUS="%(?.%F{${COLOR_STATUS_SUCCESS}}\uf058.%F{${COLOR_STATUS_ERROR}}\uf057)%f"
+  STATUS="%(?.%F{${COLOR_STATUS_SUCCESS}}${STATUS_SUCCESS_ICON}.%F{${COLOR_STATUS_ERROR}}${STATUS_ERROR_ICON})%f"
 }
 
 hietan_set_color_scheme
