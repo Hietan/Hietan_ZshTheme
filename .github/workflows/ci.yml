@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Zsh checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Zsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes zsh
+
+      - name: Check syntax
+        run: zsh -n hietan.zsh-theme
+
+      - name: Run behavior tests
+        run: zsh tests/test_theme.zsh

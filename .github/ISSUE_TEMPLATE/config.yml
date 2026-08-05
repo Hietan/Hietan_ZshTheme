@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support guide
+    url: https://github.com/Hietan/Hietan_ZshTheme/blob/main/SUPPORT.md
+    about: Read what information to include when asking for help.
+  - name: Private security report
+    url: https://github.com/Hietan/Hietan_ZshTheme/security/advisories/new
+    about: Report security vulnerabilities privately.

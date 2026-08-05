@@ -1,30 +1,29 @@
 #
 # Hietan Zsh Theme
-# Version: 1.1.1
+# Version: 2.0.0
 #
 # Author: Hietan
-# Email: hietan@example.com
 # GitHub Repository: https://github.com/Hietan/Hietan_ZshTheme
-# License: Apache Licence 2.0
-# 
-# © 2024 Hietan
+# License: Apache License 2.0
+#
+# © 2024-2026 Hietan
 #
 
 # Generic function to retrieve the project name
 # $1: Project definition file name (e.g., package.json, Cargo.toml)
 # $2: Regular expression to extract the project name
 function hietan_project_name {
-	local filename=$1
-	local regex=$2
-	local dir=$(pwd)
+  local filename=$1
+  local regex=$2
+  local dir=$PWD
 
-	while [ "$dir" != "/" ]; do
-		if [ -f "$dir/$filename" ]; then
-      echo "$(grep -o "$regex" "$dir/$filename" | sed -E 's/.*"([^"]+)".*/\1/')"
-			return
-		fi
-		dir=$(dirname "$dir")
-	done
+  while [[ $dir != / ]]; do
+    if [[ -f "$dir/$filename" ]]; then
+      grep -o "$regex" "$dir/$filename" | sed -E 's/.*"([^"]+)".*/\1/'
+      return
+    fi
+    dir=$(dirname "$dir")
+  done
 }
 
 # Combines an icon with a name if the name is not empty.
@@ -35,9 +34,9 @@ function hietan_update_name {
   local name=$2
 
   if [[ -n $name ]]; then
-    echo "$icon $name"
+    print -r -- "$icon $name"
   else
-    echo ""
+    print -r -- ""
   fi
 }
 
@@ -45,25 +44,25 @@ function hietan_update_name {
 # Each item is separated by the HIETAN_SPLITTER symbol except the first item.
 # $@: Items to be concatenated
 function hietan_echo_prompt {
-	local items=("$@")
-	local item
-	local prompt=""
-	local first=true
+  local items=("$@")
+  local item
+  local prompt=""
+  local first=true
 
-	for item in "${items[@]}"; do
-		if [[ -z ${(P)item} ]]; then
-			continue
-		fi
-		if $first; then
-			prompt+="${(P)item}"
-			first=false
-		else
-			prompt+=" ${HIETAN_SPLITTER} "
-			prompt+="${(P)item}"
-		fi
-	done
+  for item in "${items[@]}"; do
+    if [[ -z ${(P)item} ]]; then
+      continue
+    fi
+    if $first; then
+      prompt+="${(P)item}"
+      first=false
+    else
+      prompt+=" ${HIETAN_SPLITTER} "
+      prompt+="${(P)item}"
+    fi
+  done
 
-	echo $prompt
+  print -r -- "$prompt"
 }
 
 # Characters
@@ -157,9 +156,9 @@ HIETAN_GIT='$(git_prompt_info)$(git_prompt_status)'
 
 # Anaconda (Option)
 function hietan_anaconda_env_name {
-	if [[ -n ${CONDA_DEFAULT_ENV:-} ]]; then
-		echo "$CONDA_DEFAULT_ENV"
-	fi
+  if [[ -n ${CONDA_DEFAULT_ENV:-} ]]; then
+    print -r -- "$CONDA_DEFAULT_ENV"
+  fi
 }
 HIETAN_ANACONDA_ICON=$'\Uf0320'
 
@@ -175,23 +174,23 @@ HIETAN_CARGO_ICON=$'\Uf1617'
 # Precommand
 HIETAN_ITEMS=(HIETAN_TIME HIETAN_DIRECTORY HIETAN_ANACONDA HIETAN_RYE HIETAN_NPM HIETAN_CARGO)
 function hietan_precmd {
-	HIETAN_ANACONDA_NAME=$(hietan_anaconda_env_name)
-	HIETAN_ANACONDA=$(hietan_update_name "$HIETAN_ANACONDA_ICON" "$HIETAN_ANACONDA_NAME")
+  HIETAN_ANACONDA_NAME=$(hietan_anaconda_env_name)
+  HIETAN_ANACONDA=$(hietan_update_name "$HIETAN_ANACONDA_ICON" "$HIETAN_ANACONDA_NAME")
 
-	HIETAN_NPM_NAME=$(hietan_project_name "package.json" '"name": "[^"]*"')
-	HIETAN_NPM=$(hietan_update_name "$HIETAN_NPM_ICON" "$HIETAN_NPM_NAME")
+  HIETAN_NPM_NAME=$(hietan_project_name "package.json" '"name"[[:space:]]*:[[:space:]]*"[^"]*"')
+  HIETAN_NPM=$(hietan_update_name "$HIETAN_NPM_ICON" "$HIETAN_NPM_NAME")
 
-	HIETAN_CARGO_NAME=$(hietan_project_name "Cargo.toml" 'name\s*=\s*"[^"]*"')
-	HIETAN_CARGO=$(hietan_update_name "$HIETAN_CARGO_ICON" "$HIETAN_CARGO_NAME")
+  HIETAN_CARGO_NAME=$(hietan_project_name "Cargo.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
+  HIETAN_CARGO=$(hietan_update_name "$HIETAN_CARGO_ICON" "$HIETAN_CARGO_NAME")
 
-	HIETAN_RYE_NAME=$(hietan_project_name "pyproject.toml" '^\s*name\s*=\s*"[^"]*"')
-	HIETAN_RYE=$(hietan_update_name "$HIETAN_RYE_ICON" "$HIETAN_RYE_NAME")
+  HIETAN_RYE_NAME=$(hietan_project_name "pyproject.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
+  HIETAN_RYE=$(hietan_update_name "$HIETAN_RYE_ICON" "$HIETAN_RYE_NAME")
 
-# Prompt
-PROMPT="
+  # Prompt
+  PROMPT="
 %K{${HIETAN_COLOR_BAR}}%B${HIETAN_STATUS}%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_BACKGROUND}} $(hietan_echo_prompt "${HIETAN_ITEMS[@]}") ${HIETAN_GIT} %f%b%K{${HIETAN_COLOR_BAR}}%E
 %F{${HIETAN_COLOR_PROMPT}}${HIETAN_START}%f%k "
-RPROMPT='%F{${HIETAN_COLOR_BACKGROUND}}%n@%m%f'
+  RPROMPT='%F{${HIETAN_COLOR_BACKGROUND}}%n@%m%f'
 }
 
 autoload -Uz add-zsh-hook

@@ -1,2 +1,5 @@
 AGENT.md
 AGENTS.md
+.DS_Store
+*.swp
+*.tmp

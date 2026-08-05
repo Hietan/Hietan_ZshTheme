@@ -1,92 +1,122 @@
-# Hietan's ZshTheme
+# Hietan Zsh Theme
 
+[![CI](https://github.com/Hietan/Hietan_ZshTheme/actions/workflows/ci.yml/badge.svg)](https://github.com/Hietan/Hietan_ZshTheme/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/releases/latest)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/releases)
-[![GitHub Issues](https://img.shields.io/github/issues/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/issues)
-[![GitHub Forks](https://img.shields.io/github/forks/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/network/members)
-[![GitHub Stars](https://img.shields.io/github/stars/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/stargazers)
-[![GitHub last commit](https://img.shields.io/github/last-commit/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/commits/main)
-[![Contributors](https://img.shields.io/github/contributors/Hietan/Hietan_ZshTheme)](https://github.com/Hietan/Hietan_ZshTheme/graphs/contributors)
-[![Downloads](https://img.shields.io/github/downloads/Hietan/Hietan_ZshTheme/total)](https://github.com/Hietan/Hietan_ZshTheme/releases)
 
-Customized Zsh theme that supports Git, Anaconda, Rye, npm, and Cargo projects.\
-The theme offers icons, time, directory information, status indicators, and project information in the prompt.
+Hietan is a two-line Oh My Zsh theme that shows command status, time, the
+current directory, Git state, environments, and project metadata. Version 2
+adds automatic dark and light palettes for terminals with different
+backgrounds.
+
+![Hietan Zsh Theme](https://github.com/user-attachments/assets/126739ff-f537-4305-a7d6-e9f81d8b66ce)
 
 ## Features
 
-![Thems's Screenshot](https://github.com/user-attachments/assets/126739ff-f537-4305-a7d6-e9f81d8b66ce)
+- Success and failure indicators with high-contrast backgrounds.
+- Date, time, and current directory.
+- Git branch and working-tree status through Oh My Zsh.
+- Anaconda environment name.
+- Project names from parent `package.json`, `Cargo.toml`, and `pyproject.toml`
+  files.
+- Automatic light mode in Codex and dark mode in iTerm2.
+- Namespaced helpers and a reusable `precmd` hook.
 
-- Display blow informations with icon
-  - Status indicators
-  - Date and Time
-  - Directory
-  - Git status
-  - Anaconda environment name
-  - Rye project name
-  - npm (yarn) project name
-  - Cargo project name
+## Requirements
 
-## Require
+- Zsh
+- [Oh My Zsh](https://ohmyz.sh/)
+- A [Nerd Font](https://www.nerdfonts.com/)
 
-This theme requires below applications:
-
-* Zsh
-* [Oh My Zsh](https://ohmyz.sh/)
-* [Nerd Fonts](https://www.nerdfonts.com/)
-
-This theme also supports the following applications:
-
-* Git (Option)
-* [Anaconda](https://www.anaconda.com/) (Option)
-* [Rye](https://rye.astral.sh/) (Option)
-* [npm](https://www.npmjs.com/) (Option)
-* [yarn](https://yarnpkg.com/) (Option)
-* [Cargo](https://doc.rust-lang.org/cargo/index.html) (Option)
+Git, Anaconda, Node.js package metadata, Cargo, and Python project metadata are
+optional. Missing tools or metadata simply leave their prompt segment empty.
 
 ## Installation
 
-To install the Hietan Zsh Theme, follow these steps:
+Download the latest released theme into the Oh My Zsh custom themes directory:
 
-1. **Clone the repository**:
+```sh
+theme_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
+mkdir -p "$theme_dir"
+curl -fsSL \
+  https://github.com/Hietan/Hietan_ZshTheme/releases/latest/download/hietan.zsh-theme \
+  -o "$theme_dir/hietan.zsh-theme"
+```
 
-   ```sh
-   git clone https://github.com/Hietan/Hietan_ZshTheme.git
-   ```
+Set the theme in `~/.zshrc`:
 
-2. **Create a symbolic link to the theme in the Oh My Zsh themes directory**:
+```sh
+ZSH_THEME="hietan"
+```
 
-   ```sh
-   ln -s $(pwd)/Hietan_ZshTheme/hietan.zsh-theme ~/.oh-my-zsh/themes/hietan.zsh-theme
-   ```
+Reload Zsh:
 
-3. **Set the theme to `hietan` in your `.zshrc`**:
+```sh
+exec zsh
+```
 
-   Open your `.zshrc` file in a text editor and modify the `ZSH_THEME` line:
+### Install from Git
 
-   ```sh
-   ZSH_THEME="hietan"
-   ```
+For development or tracking `main`, clone the repository and link the theme:
 
-   The color scheme is selected automatically from the terminal environment:
+```sh
+git clone https://github.com/Hietan/Hietan_ZshTheme.git
+ln -s "$PWD/Hietan_ZshTheme/hietan.zsh-theme" \
+  "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/hietan.zsh-theme"
+```
 
-   - `CODEX_SHELL=1`: light
-   - `TERM_PROGRAM=iTerm.app`: dark
+## Color schemes
 
-   Codex takes priority when both variables are present. In other environments,
-   the dark color scheme is used by default. To select a scheme manually there,
-   set `HIETAN_COLOR_SCHEME` before `ZSH_THEME`:
+The theme selects a color scheme from the terminal environment:
 
-   ```sh
-   HIETAN_COLOR_SCHEME="light"
-   ZSH_THEME="hietan"
-   ```
+| Condition | Scheme |
+| --- | --- |
+| `CODEX_SHELL=1` | Light |
+| `TERM_PROGRAM=iTerm.app` | Dark |
+| Otherwise | `HIETAN_COLOR_SCHEME`, defaulting to dark |
 
-   Available values are `dark` and `light`.
+Codex takes priority if both detection variables are present. In another
+terminal, select a scheme before Oh My Zsh is loaded:
 
-4. **Reload your Zsh configuration**:
+```sh
+HIETAN_COLOR_SCHEME="light"
+ZSH_THEME="hietan"
+```
 
-   ```sh
-   source ~/.zshrc
-   ```
+Valid values are `dark` and `light`. An unknown value prints a warning and
+falls back to dark.
 
-After completing these steps, the Hietan Zsh Theme should be active in your terminal.
+## Updating
+
+Repeat the release download command from the installation section. The latest
+release asset replaces the installed theme file.
+
+## Migrating from 1.x
+
+Version 2 namespaces internal helpers and variables. Custom configurations that
+referenced names such as `COLOR_TEXT`, `STATUS`, `TIME`, or `project_name` must
+use their `HIETAN_*` or `hietan_*` equivalents. Standard Oh My Zsh installation
+and `ZSH_THEME="hietan"` configuration are unchanged.
+
+## Development
+
+Run the complete local checks:
+
+```sh
+zsh -n hietan.zsh-theme
+zsh tests/test_theme.zsh
+```
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution guidelines and
+[`RELEASE.md`](RELEASE.md) for the release checklist.
+
+## Support and security
+
+- Read [`SUPPORT.md`](SUPPORT.md) before opening a support issue.
+- Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
+- Review changes in [`CHANGELOG.md`](CHANGELOG.md).
+
+## License
+
+Licensed under the Apache License 2.0. See [`LICENSE`](LICENSE) and
+[`NOTICE`](NOTICE).

@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Zsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes zsh
+
+      - name: Verify version tag
+        shell: bash
+        run: |
+          version=$(sed -n 's/^# Version: //p' hietan.zsh-theme)
+          test "$GITHUB_REF_NAME" = "v$version"
+
+      - name: Run checks
+        run: |
+          zsh -n hietan.zsh-theme
+          zsh tests/test_theme.zsh
+
+      - name: Build release archives
+        shell: bash
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          bundle="hietan-zsh-theme-$version"
+          mkdir "$bundle"
+          cp hietan.zsh-theme README.md CHANGELOG.md LICENSE NOTICE "$bundle/"
+          tar -czf "$bundle.tar.gz" "$bundle"
+          zip -qr "$bundle.zip" "$bundle"
+          sha256sum \
+            hietan.zsh-theme \
+            "$bundle.tar.gz" \
+            "$bundle.zip" \
+            > SHA256SUMS
+
+      - name: Prepare release notes
+        shell: bash
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          awk -v header="## [$version]" '
+            index($0, header) == 1 { capture = 1; next }
+            capture && /^## \[/ { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            hietan.zsh-theme \
+            hietan-zsh-theme-*.tar.gz \
+            hietan-zsh-theme-*.zip \
+            SHA256SUMS \
+            --verify-tag \
+            --notes-file release-notes.md \
+            --title "Hietan Zsh Theme ${GITHUB_REF_NAME#v}"

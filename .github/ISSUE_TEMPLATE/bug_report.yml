@@ -1,0 +1,74 @@
+name: Bug report
+description: Report reproducible incorrect prompt behavior
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for helping improve Hietan Zsh Theme.
+  - type: input
+    id: version
+    attributes:
+      label: Theme version
+      description: Release version or Git commit.
+      placeholder: v2.0.0
+    validations:
+      required: true
+  - type: input
+    id: zsh
+    attributes:
+      label: Zsh and Oh My Zsh versions
+      placeholder: zsh 5.9, Oh My Zsh commit ...
+    validations:
+      required: true
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal and operating system
+      placeholder: iTerm2 3.x on macOS, or Codex terminal
+    validations:
+      required: true
+  - type: input
+    id: font
+    attributes:
+      label: Nerd Font
+      placeholder: JetBrainsMono Nerd Font 3.x
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem
+      description: Explain what happened and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Configure ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Relevant environment variables
+      description: Remove secrets before posting.
+      render: shell
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot or terminal output
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I am using a Nerd Font.
+          required: true
