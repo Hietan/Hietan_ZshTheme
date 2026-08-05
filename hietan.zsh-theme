@@ -68,8 +68,8 @@ function echo_prompt {
 # Characters
 SPLITTER=$'\Uf01d9'
 START=$'\uf460'
-STATUS_SUCCESS_ICON=$'\Uf0133'
-STATUS_ERROR_ICON=$'\Uf0159'
+STATUS_SUCCESS_ICON=$'\Uf012c'
+STATUS_ERROR_ICON=$'\Uf0156'
 
 # Color scheme
 # Codex takes priority if both environment variables are present.
@@ -188,7 +188,7 @@ precmd() {
 
 # Prompt
 PROMPT="
-%K{${COLOR_BAR}} ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}}%B $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
+%K{${COLOR_BAR}}%B ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}} $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
 %F{${COLOR_PROMPT}}${START}%f%k "
 RPROMPT='%F{${COLOR_BACKGROUND}}%n@%m%f'
 }
