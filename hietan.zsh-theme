@@ -123,7 +123,7 @@ function hietan_set_color_scheme {
       ;;
   esac
 
-  STATUS="%(?.%F{${COLOR_STATUS_SUCCESS}}${STATUS_SUCCESS_ICON}.%F{${COLOR_STATUS_ERROR}}${STATUS_ERROR_ICON})%f"
+  STATUS="%(?.%F{${COLOR_TEXT}}%K{${COLOR_STATUS_SUCCESS}} ${STATUS_SUCCESS_ICON} .%F{${COLOR_TEXT}}%K{${COLOR_STATUS_ERROR}} ${STATUS_ERROR_ICON} )%f"
 }
 
 hietan_set_color_scheme
@@ -188,7 +188,7 @@ precmd() {
 
 # Prompt
 PROMPT="
-%K{${COLOR_BAR}}%B ${STATUS} %F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}} $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
+%K{${COLOR_BAR}}%B${STATUS}%F{${COLOR_TEXT}}%K{${COLOR_BACKGROUND}} $(echo_prompt "${ITEMS[@]}") ${GIT} %f%b%K{${COLOR_BAR}}%E
 %F{${COLOR_PROMPT}}${START}%f%k "
 RPROMPT='%F{${COLOR_BACKGROUND}}%n@%m%f'
 }
