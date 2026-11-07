@@ -33,6 +33,10 @@ theme_version=$(sed -n 's/^# Version: //p' "$theme_file")
 unset CODEX_SHELL TERM_PROGRAM HIETAN_COLOR_SCHEME CONDA_DEFAULT_ENV
 source "$theme_file"
 
+# Oh My Zsh checks these substitutions before running the theme's precmd.
+assert_contains "$PROMPT" '$(git_prompt_info)' "initial Git info registration"
+assert_contains "$PROMPT" '$(git_prompt_status)' "initial Git status registration"
+
 assert_equal "$HIETAN_COLOR_SCHEME" dark "default scheme"
 assert_equal "$HIETAN_COLOR_TEXT" '#000000' "dark text color"
 assert_equal "$HIETAN_COLOR_STATUS_SUCCESS" '#008700' "dark success color"
@@ -74,6 +78,7 @@ mkdir -p "$test_dir/project/nested"
 print -r -- '{"name":"node-demo"}' > "$test_dir/project/package.json"
 print -r -- 'name = "cargo-demo"' > "$test_dir/project/Cargo.toml"
 print -r -- '  name = "python-demo"' > "$test_dir/project/pyproject.toml"
+print -r -- 'version = 1' > "$test_dir/project/uv.lock"
 
 cd "$test_dir/project/nested"
 hietan_precmd
@@ -84,6 +89,13 @@ assert_equal "$HIETAN_NPM" "$HIETAN_NPM_ICON node-demo" "npm segment"
 assert_equal "$HIETAN_CARGO" "$HIETAN_CARGO_ICON cargo-demo" "Cargo segment"
 assert_equal "$HIETAN_RYE" "$HIETAN_RYE_ICON python-demo" "Python segment"
 assert_contains "$PROMPT" "${HIETAN_START}%f%k " "uncolored input space"
+
+mkdir -p "$test_dir/empty"
+cd "$test_dir/empty"
+hietan_precmd
+assert_equal "$HIETAN_RYE" '' "Python segment cleared outside project"
+assert_equal "$HIETAN_NPM" '' "npm segment cleared outside project"
+assert_equal "$HIETAN_CARGO" '' "Cargo segment cleared outside project"
 
 unset item
 hietan_echo_prompt HIETAN_TIME HIETAN_DIRECTORY >/dev/null

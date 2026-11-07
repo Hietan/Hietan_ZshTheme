@@ -153,6 +153,8 @@ ZSH_THEME_GIT_PROMPT_BEHIND=" \uf434"
 ZSH_THEME_GIT_PROMPT_DIVERGED=" \ue728"
 ZSH_THEME_GIT_PROMPT_STASHED=" \Uf0613"
 HIETAN_GIT='$(git_prompt_info)$(git_prompt_status)'
+# Oh My Zsh inspects PROMPT before the first theme precmd hook runs.
+PROMPT="${HIETAN_GIT}"
 
 # Anaconda (Option)
 function hietan_anaconda_env_name {

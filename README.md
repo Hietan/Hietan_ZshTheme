@@ -30,6 +30,9 @@ backgrounds.
 
 Git, Anaconda, Node.js package metadata, Cargo, and Python project metadata are
 optional. Missing tools or metadata simply leave their prompt segment empty.
+Python project names include uv and Rye projects with a double-quoted `name`
+in `pyproject.toml`, including from nested directories. Activating a virtual
+environment alone does not add a project name.
 
 ## Installation
 

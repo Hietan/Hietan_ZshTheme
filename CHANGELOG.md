@@ -7,6 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Initialize the Git prompt before Oh My Zsh registers asynchronous handlers.
+
 ## [2.0.0] - 2026-08-05
 
 ### Added
