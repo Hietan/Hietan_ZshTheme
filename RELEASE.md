@@ -27,9 +27,19 @@ aliases throughout 2.x. Remove those aliases only in a major release.
    zsh tests/test_theme.zsh
    ```
 
+   In a fresh interactive Oh My Zsh session, confirm that Git information
+   appears on the first prompt after asynchronous loading and updates when
+   moving between a repository, its nested directories, and a non-repository
+   directory. Check both successful and failed command indicators.
+
+   Check the default dark scheme with no color settings, an application-specific
+   override, and the common fallback. Verify project segments both with and
+   without metadata, including a Python project without `uv.lock`.
+
 6. Confirm that the release tag does not already exist.
 7. Commit the release preparation.
-8. Push `main` and wait for CI to pass.
+8. Push `main` and wait for both Linux and macOS CI checks to pass on that exact
+   commit. A successful check from an older commit is not sufficient.
 9. Create and push the annotated tag:
 
    ```sh

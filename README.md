@@ -142,7 +142,8 @@ and `ZSH_THEME="hietan"` configuration are unchanged.
 
 The Python project segment now uses `HIETAN_UV`, `HIETAN_UV_NAME`, and
 `HIETAN_UV_ICON` as the preferred names. The previous `HIETAN_RYE*` variables
-remain available as compatibility aliases in 2.x. Detection uses `pyproject.toml` and does not require the uv command or a `uv.lock` file.
+remain available as compatibility aliases in 2.x. Detection uses
+`pyproject.toml` and does not require the uv command or a `uv.lock` file.
 
 ## Development
 
