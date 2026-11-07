@@ -80,7 +80,8 @@ The theme identifies the application through `TERM_PROGRAM`. When
 `CODEX_SHELL=1`, it identifies the session as Codex instead. It does not query
 the actual background color or the macOS appearance.
 
-All terminals default to **dark**, including Codex, iTerm2, and macOS Terminal.
+All terminals default to **dark**, including Ghostty, iTerm2, macOS Terminal,
+and Codex.
 No configuration file or environment variable is required.
 
 To choose colors without editing the theme, set variables in `~/.zshrc`
@@ -92,6 +93,7 @@ HIETAN_COLOR_SCHEME=dark
 
 # Optional per-application overrides.
 HIETAN_COLOR_SCHEME_CODEX=light
+HIETAN_COLOR_SCHEME_GHOSTTY=dark
 HIETAN_COLOR_SCHEME_ITERM_APP=dark
 HIETAN_COLOR_SCHEME_APPLE_TERMINAL=light
 HIETAN_COLOR_SCHEME_VSCODE=dark
@@ -103,9 +105,13 @@ source "$ZSH/oh-my-zsh.sh"
 | Application | Identification | Override variable |
 | --- | --- | --- |
 | Codex | `CODEX_SHELL=1` | `HIETAN_COLOR_SCHEME_CODEX` |
+| Ghostty | `TERM_PROGRAM=ghostty` | `HIETAN_COLOR_SCHEME_GHOSTTY` |
 | iTerm2 | `TERM_PROGRAM=iTerm.app` | `HIETAN_COLOR_SCHEME_ITERM_APP` |
 | macOS Terminal | `TERM_PROGRAM=Apple_Terminal` | `HIETAN_COLOR_SCHEME_APPLE_TERMINAL` |
 | VS Code terminal | `TERM_PROGRAM=vscode` | `HIETAN_COLOR_SCHEME_VSCODE` |
+
+These are configuration examples, not an exclusive list of supported apps.
+To check the identity exposed by your terminal, run `print -r -- "$TERM_PROGRAM"`.
 
 For another terminal, uppercase its `TERM_PROGRAM` value, replace each
 character outside `A-Z` and `0-9` with `_`, and prepend
