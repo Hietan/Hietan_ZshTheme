@@ -6,7 +6,7 @@
 
 Hietan is a two-line Oh My Zsh theme that shows command status, time, the
 current directory, Git state, environments, and project metadata. Version 2
-adds automatic dark and light palettes for terminals with different
+provides configurable dark and light palettes for terminals with different
 backgrounds.
 
 ![Hietan Zsh Theme](https://github.com/user-attachments/assets/126739ff-f537-4305-a7d6-e9f81d8b66ce)
@@ -19,7 +19,7 @@ backgrounds.
 - Anaconda environment name.
 - Project names from parent `package.json`, `Cargo.toml`, and `pyproject.toml`
   files.
-- Automatic light mode in Codex and dark mode in iTerm2.
+- Configurable colors per terminal application, defaulting to dark.
 - Namespaced helpers and a reusable `precmd` hook.
 
 ## Requirements
@@ -76,28 +76,49 @@ ln -s "$PWD/Hietan_ZshTheme/hietan.zsh-theme" \
 
 ## Color schemes
 
-The theme selects a color scheme from the terminal environment:
+The theme identifies the application through `TERM_PROGRAM`. When
+`CODEX_SHELL=1`, it identifies the session as Codex instead. It does not query
+the actual background color or the macOS appearance.
 
-| Condition | Scheme |
-| --- | --- |
-| `CODEX_SHELL=1` | Light |
-| `TERM_PROGRAM=iTerm.app` | Dark |
-| `TERM_PROGRAM=Apple_Terminal` (macOS Terminal) | `HIETAN_COLOR_SCHEME`, defaulting to dark |
-| Otherwise | `HIETAN_COLOR_SCHEME`, defaulting to dark |
+All terminals default to **dark**, including Codex, iTerm2, and macOS Terminal.
+No configuration file or environment variable is required.
 
-These rules identify the terminal application; they do not query its actual
-background, the macOS appearance, or changes to the active terminal profile.
-Codex takes priority over `TERM_PROGRAM` and manual settings. iTerm2 always
-selects dark. For macOS Terminal or another terminal, select the scheme that
-matches your profile before Oh My Zsh is loaded:
+To choose colors without editing the theme, set variables in `~/.zshrc`
+**before** loading Oh My Zsh:
 
 ```sh
-HIETAN_COLOR_SCHEME="light"
+# Optional common fallback (defaults to dark).
+HIETAN_COLOR_SCHEME=dark
+
+# Optional per-application overrides.
+HIETAN_COLOR_SCHEME_CODEX=light
+HIETAN_COLOR_SCHEME_ITERM_APP=dark
+HIETAN_COLOR_SCHEME_APPLE_TERMINAL=light
+HIETAN_COLOR_SCHEME_VSCODE=dark
+
 ZSH_THEME="hietan"
+source "$ZSH/oh-my-zsh.sh"
 ```
 
-Valid values are `dark` and `light`. An unknown value prints a warning and
-falls back to dark.
+| Application | Identification | Override variable |
+| --- | --- | --- |
+| Codex | `CODEX_SHELL=1` | `HIETAN_COLOR_SCHEME_CODEX` |
+| iTerm2 | `TERM_PROGRAM=iTerm.app` | `HIETAN_COLOR_SCHEME_ITERM_APP` |
+| macOS Terminal | `TERM_PROGRAM=Apple_Terminal` | `HIETAN_COLOR_SCHEME_APPLE_TERMINAL` |
+| VS Code terminal | `TERM_PROGRAM=vscode` | `HIETAN_COLOR_SCHEME_VSCODE` |
+
+For another terminal, uppercase its `TERM_PROGRAM` value, replace each
+character outside `A-Z` and `0-9` with `_`, and prepend
+`HIETAN_COLOR_SCHEME_`. If `TERM_PROGRAM` is missing, the key is `UNKNOWN`.
+
+Precedence is: nonempty application override, nonempty `HIETAN_COLOR_SCHEME`,
+then `dark`. Codex sessions use the Codex override even when `TERM_PROGRAM`
+identifies the host terminal. Empty settings are treated as unspecified.
+Valid values are `dark` and `light`; an invalid selected value prints a warning
+and falls back to dark. Start a new shell with `exec zsh` after changing settings.
+
+In 2.0, Codex and iTerm2 forced light and dark respectively. To retain the old
+Codex behavior, set `HIETAN_COLOR_SCHEME_CODEX=light`.
 
 ## Updating
 

@@ -71,19 +71,16 @@ HIETAN_START=$'\uf460'
 HIETAN_STATUS_SUCCESS_ICON=$'\Uf0e1e'
 HIETAN_STATUS_ERROR_ICON=$'\Uf1398'
 
-# Color scheme
-# Codex takes priority if both environment variables are present.
-if [[ ${CODEX_SHELL:-} == 1 ]]; then
-  HIETAN_COLOR_SCHEME=light
-elif [[ ${TERM_PROGRAM:-} == iTerm.app ]]; then
-  HIETAN_COLOR_SCHEME=dark
-elif [[ ${TERM_PROGRAM:-} == Apple_Terminal ]]; then
-  # Terminal identifies the app, not the profile's background color.
-  HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
-else
-  # Set this to "dark" or "light" before loading the theme to override the default.
-  HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
-fi
+# Per-terminal settings take priority over the common default.
+function hietan_detect_color_scheme {
+  local terminal=${TERM_PROGRAM:-unknown}
+  if [[ ${CODEX_SHELL:-} == 1 ]]; then
+    terminal=codex
+  fi
+  local setting="HIETAN_COLOR_SCHEME_${${(U)terminal}//[^A-Z0-9]/_}"
+  print -r -- "${(P)setting:-${HIETAN_COLOR_SCHEME:-dark}}"
+}
+HIETAN_COLOR_SCHEME=$(hietan_detect_color_scheme)
 
 # Dark color palette
 HIETAN_COLOR_DARK_TEXT='#000000'

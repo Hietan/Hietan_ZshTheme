@@ -31,6 +31,7 @@ theme_version=$(sed -n 's/^# Version: //p' "$theme_file")
   fail "theme version is not valid semantic versioning"
 
 unset CODEX_SHELL TERM_PROGRAM HIETAN_COLOR_SCHEME CONDA_DEFAULT_ENV
+unset HIETAN_COLOR_SCHEME_UNKNOWN
 source "$theme_file"
 
 # Oh My Zsh checks these substitutions before running the theme's precmd.
@@ -54,25 +55,40 @@ HIETAN_COLOR_SCHEME=invalid
 hietan_set_color_scheme 2>/dev/null
 assert_equal "$HIETAN_COLOR_SCHEME" dark "invalid scheme fallback"
 
-env CODEX_SHELL=1 TERM_PROGRAM=iTerm.app zsh -fc \
-  'source "$1"; [[ $HIETAN_COLOR_SCHEME == light ]]' _ "$theme_file" || \
-  fail "Codex should take priority and select light mode"
+# Run each detection case in a fresh shell with no inherited color settings.
+function assert_scheme {
+  local expected=$1
+  shift
+  env -u CODEX_SHELL -u TERM_PROGRAM -u HIETAN_COLOR_SCHEME \
+    -u HIETAN_COLOR_SCHEME_CODEX -u HIETAN_COLOR_SCHEME_ITERM_APP \
+    -u HIETAN_COLOR_SCHEME_APPLE_TERMINAL -u HIETAN_COLOR_SCHEME_VSCODE \
+    -u HIETAN_COLOR_SCHEME_UNKNOWN -u HIETAN_COLOR_SCHEME_OTHER_TERM \
+    "$@" zsh -fc 'source "$1"; [[ $HIETAN_COLOR_SCHEME == "$2" ]]' \
+    _ "$theme_file" "$expected" || fail "color detection: $* (expected $expected)"
+}
 
-env -u CODEX_SHELL TERM_PROGRAM=iTerm.app zsh -fc \
-  'source "$1"; [[ $HIETAN_COLOR_SCHEME == dark ]]' _ "$theme_file" || \
-  fail "iTerm should select dark mode"
-
-env -u CODEX_SHELL -u HIETAN_COLOR_SCHEME TERM_PROGRAM=Apple_Terminal zsh -fc \
-  'source "$1"; [[ $HIETAN_COLOR_SCHEME == dark ]]' _ "$theme_file" || \
-  fail "Apple Terminal should default to dark mode"
-
-env -u CODEX_SHELL HIETAN_COLOR_SCHEME=light TERM_PROGRAM=Apple_Terminal zsh -fc \
-  'source "$1"; [[ $HIETAN_COLOR_SCHEME == light ]]' _ "$theme_file" || \
-  fail "Apple Terminal should accept a light profile override"
-
-env CODEX_SHELL=1 TERM_PROGRAM=Apple_Terminal zsh -fc \
-  'source "$1"; [[ $HIETAN_COLOR_SCHEME == light ]]' _ "$theme_file" || \
-  fail "Codex should take priority over Apple Terminal"
+assert_scheme dark
+assert_scheme dark CODEX_SHELL=1
+assert_scheme dark TERM_PROGRAM=iTerm.app
+assert_scheme dark TERM_PROGRAM=Apple_Terminal
+assert_scheme dark TERM_PROGRAM=vscode
+assert_scheme light HIETAN_COLOR_SCHEME=light
+assert_scheme light CODEX_SHELL=1 HIETAN_COLOR_SCHEME=light
+assert_scheme light TERM_PROGRAM=iTerm.app HIETAN_COLOR_SCHEME_ITERM_APP=light
+assert_scheme light TERM_PROGRAM=Apple_Terminal HIETAN_COLOR_SCHEME_APPLE_TERMINAL=light
+assert_scheme light TERM_PROGRAM=vscode HIETAN_COLOR_SCHEME_VSCODE=light
+assert_scheme light TERM_PROGRAM=other-term HIETAN_COLOR_SCHEME_OTHER_TERM=light
+assert_scheme light HIETAN_COLOR_SCHEME_UNKNOWN=light
+assert_scheme light CODEX_SHELL=1 TERM_PROGRAM=iTerm.app \
+  HIETAN_COLOR_SCHEME_CODEX=light HIETAN_COLOR_SCHEME_ITERM_APP=dark
+assert_scheme dark CODEX_SHELL=1 TERM_PROGRAM=Apple_Terminal \
+  HIETAN_COLOR_SCHEME_APPLE_TERMINAL=light
+assert_scheme dark HIETAN_COLOR_SCHEME=light TERM_PROGRAM=vscode \
+  HIETAN_COLOR_SCHEME_VSCODE=dark
+assert_scheme light HIETAN_COLOR_SCHEME=light TERM_PROGRAM=vscode \
+  HIETAN_COLOR_SCHEME_VSCODE=
+assert_scheme dark HIETAN_COLOR_SCHEME= HIETAN_COLOR_SCHEME_UNKNOWN=
+assert_scheme dark TERM_PROGRAM=vscode HIETAN_COLOR_SCHEME_VSCODE=invalid 2>/dev/null
 
 CONDA_DEFAULT_ENV=test-env
 hietan_precmd

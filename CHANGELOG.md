@@ -11,11 +11,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- Explicit macOS Terminal detection via `TERM_PROGRAM=Apple_Terminal`,
-  defaulting to dark while respecting `HIETAN_COLOR_SCHEME`.
+- Per-application color settings through `HIETAN_COLOR_SCHEME_<APP>`,
+  including Codex, iTerm2, macOS Terminal, and VS Code.
 
 ### Changed
 
+- Default all terminals to dark when no color settings are provided.
+  Set `HIETAN_COLOR_SCHEME_CODEX=light` to retain the 2.0 Codex appearance.
 - Use uv (`HIETAN_UV*`) for the Python project segment while retaining
   `HIETAN_RYE*` compatibility aliases for 2.x customizations.
 
