@@ -164,8 +164,8 @@ function hietan_anaconda_env_name {
 }
 HIETAN_ANACONDA_ICON=$'\Uf0320'
 
-# Rye (Option)
-HIETAN_RYE_ICON=$'\Uf0320'
+# uv (Option)
+HIETAN_UV_ICON=$'\Uf0320'
 
 # npm (Option)
 HIETAN_NPM_ICON=$'\Uf031e'
@@ -174,7 +174,7 @@ HIETAN_NPM_ICON=$'\Uf031e'
 HIETAN_CARGO_ICON=$'\Uf1617'
 
 # Precommand
-HIETAN_ITEMS=(HIETAN_TIME HIETAN_DIRECTORY HIETAN_ANACONDA HIETAN_RYE HIETAN_NPM HIETAN_CARGO)
+HIETAN_ITEMS=(HIETAN_TIME HIETAN_DIRECTORY HIETAN_ANACONDA HIETAN_UV HIETAN_NPM HIETAN_CARGO)
 function hietan_precmd {
   HIETAN_ANACONDA_NAME=$(hietan_anaconda_env_name)
   HIETAN_ANACONDA=$(hietan_update_name "$HIETAN_ANACONDA_ICON" "$HIETAN_ANACONDA_NAME")
@@ -185,8 +185,8 @@ function hietan_precmd {
   HIETAN_CARGO_NAME=$(hietan_project_name "Cargo.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
   HIETAN_CARGO=$(hietan_update_name "$HIETAN_CARGO_ICON" "$HIETAN_CARGO_NAME")
 
-  HIETAN_RYE_NAME=$(hietan_project_name "pyproject.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
-  HIETAN_RYE=$(hietan_update_name "$HIETAN_RYE_ICON" "$HIETAN_RYE_NAME")
+  HIETAN_UV_NAME=$(hietan_project_name "pyproject.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
+  HIETAN_UV=$(hietan_update_name "$HIETAN_UV_ICON" "$HIETAN_UV_NAME")
 
   # Prompt
   PROMPT="

@@ -7,6 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Rename the Python project segment from Rye (`HIETAN_RYE*`) to uv (`HIETAN_UV*`).
+
 ### Fixed
 
 - Initialize the Git prompt before Oh My Zsh registers asynchronous handlers.

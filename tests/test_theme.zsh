@@ -84,16 +84,16 @@ cd "$test_dir/project/nested"
 hietan_precmd
 assert_equal "$HIETAN_NPM_NAME" node-demo "npm project name"
 assert_equal "$HIETAN_CARGO_NAME" cargo-demo "Cargo project name"
-assert_equal "$HIETAN_RYE_NAME" python-demo "Python project name"
+assert_equal "$HIETAN_UV_NAME" python-demo "Python project name"
 assert_equal "$HIETAN_NPM" "$HIETAN_NPM_ICON node-demo" "npm segment"
 assert_equal "$HIETAN_CARGO" "$HIETAN_CARGO_ICON cargo-demo" "Cargo segment"
-assert_equal "$HIETAN_RYE" "$HIETAN_RYE_ICON python-demo" "Python segment"
+assert_equal "$HIETAN_UV" "$HIETAN_UV_ICON python-demo" "Python segment"
 assert_contains "$PROMPT" "${HIETAN_START}%f%k " "uncolored input space"
 
 mkdir -p "$test_dir/empty"
 cd "$test_dir/empty"
 hietan_precmd
-assert_equal "$HIETAN_RYE" '' "Python segment cleared outside project"
+assert_equal "$HIETAN_UV" '' "Python segment cleared outside project"
 assert_equal "$HIETAN_NPM" '' "npm segment cleared outside project"
 assert_equal "$HIETAN_CARGO" '' "Cargo segment cleared outside project"
 

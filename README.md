@@ -30,7 +30,7 @@ backgrounds.
 
 Git, Anaconda, Node.js package metadata, Cargo, and Python project metadata are
 optional. Missing tools or metadata simply leave their prompt segment empty.
-Python project names include uv and Rye projects with a double-quoted `name`
+Python project names include uv projects with a double-quoted `name`
 in `pyproject.toml`, including from nested directories. Activating a virtual
 environment alone does not add a project name.
 
@@ -100,6 +100,10 @@ Version 2 namespaces internal helpers and variables. Custom configurations that
 referenced names such as `COLOR_TEXT`, `STATUS`, `TIME`, or `project_name` must
 use their `HIETAN_*` or `hietan_*` equivalents. Standard Oh My Zsh installation
 and `ZSH_THEME="hietan"` configuration are unchanged.
+
+The Python project segment now uses `HIETAN_UV`, `HIETAN_UV_NAME`, and
+`HIETAN_UV_ICON` in place of the previous `HIETAN_RYE*` variables. Detection
+uses `pyproject.toml` and does not require the uv command or a `uv.lock` file.
 
 ## Development
 
