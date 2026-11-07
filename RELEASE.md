@@ -11,6 +11,9 @@ of `hietan.zsh-theme`, and tags use the form `vX.Y.Z`.
 - Minor releases add compatible functionality.
 - Major releases may change configuration names or prompt behavior.
 
+The `HIETAN_UV*` names introduced in 2.1 retain `HIETAN_RYE*` compatibility
+aliases throughout 2.x. Remove those aliases only in a major release.
+
 ## Checklist
 
 1. Start from an up-to-date `main` branch with a clean worktree.
@@ -37,8 +40,8 @@ of `hietan.zsh-theme`, and tags use the form `vX.Y.Z`.
 10. Confirm that the `Release` workflow publishes the GitHub Release and
     attaches `hietan.zsh-theme`, `.tar.gz` and `.zip` bundles, and
     `SHA256SUMS`. The archives must include `README.md`, `CHANGELOG.md`,
-    `LICENSE`, and `NOTICE`. Release notes are extracted from the matching
-    `CHANGELOG.md` section.
+    `LICENSE`, `NOTICE`, linked support and contribution documents, and `tests/`.
+    Release notes are extracted from the matching `CHANGELOG.md` section.
 11. Download the release asset and run a final syntax check.
 
 ## Failed releases

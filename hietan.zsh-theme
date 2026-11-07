@@ -1,6 +1,6 @@
 #
 # Hietan Zsh Theme
-# Version: 2.0.0
+# Version: 2.1.0
 #
 # Author: Hietan
 # GitHub Repository: https://github.com/Hietan/Hietan_ZshTheme
@@ -34,7 +34,7 @@ function hietan_update_name {
   local name=$2
 
   if [[ -n $name ]]; then
-    print -r -- "$icon $name"
+    print -r -- "$icon ${name//\%/%%}"
   else
     print -r -- ""
   fi
@@ -77,6 +77,9 @@ if [[ ${CODEX_SHELL:-} == 1 ]]; then
   HIETAN_COLOR_SCHEME=light
 elif [[ ${TERM_PROGRAM:-} == iTerm.app ]]; then
   HIETAN_COLOR_SCHEME=dark
+elif [[ ${TERM_PROGRAM:-} == Apple_Terminal ]]; then
+  # Terminal identifies the app, not the profile's background color.
+  HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
 else
   # Set this to "dark" or "light" before loading the theme to override the default.
   HIETAN_COLOR_SCHEME=${HIETAN_COLOR_SCHEME:-dark}
@@ -166,6 +169,8 @@ HIETAN_ANACONDA_ICON=$'\Uf0320'
 
 # uv (Option)
 HIETAN_UV_ICON=$'\Uf0320'
+# Compatibility aliases for 2.0 customizations.
+HIETAN_RYE_ICON=$HIETAN_UV_ICON
 
 # npm (Option)
 HIETAN_NPM_ICON=$'\Uf031e'
@@ -188,9 +193,12 @@ function hietan_precmd {
   HIETAN_UV_NAME=$(hietan_project_name "pyproject.toml" '^[[:space:]]*name[[:space:]]*=[[:space:]]*"[^"]*"')
   HIETAN_UV=$(hietan_update_name "$HIETAN_UV_ICON" "$HIETAN_UV_NAME")
 
-  # Prompt
+  HIETAN_RYE_NAME=$HIETAN_UV_NAME
+  HIETAN_RYE=$(hietan_update_name "$HIETAN_RYE_ICON" "$HIETAN_RYE_NAME")
+
+  # Expand metadata only at render time so names cannot execute shell code.
   PROMPT="
-%K{${HIETAN_COLOR_BAR}}%B${HIETAN_STATUS}%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_BACKGROUND}} $(hietan_echo_prompt "${HIETAN_ITEMS[@]}") ${HIETAN_GIT} %f%b%K{${HIETAN_COLOR_BAR}}%E
+%K{${HIETAN_COLOR_BAR}}%B${HIETAN_STATUS}%F{${HIETAN_COLOR_TEXT}}%K{${HIETAN_COLOR_BACKGROUND}} \$(hietan_echo_prompt \"\${HIETAN_ITEMS[@]}\") ${HIETAN_GIT} %f%b%K{${HIETAN_COLOR_BAR}}%E
 %F{${HIETAN_COLOR_PROMPT}}${HIETAN_START}%f%k "
   RPROMPT='%F{${HIETAN_COLOR_BACKGROUND}}%n@%m%f'
 }

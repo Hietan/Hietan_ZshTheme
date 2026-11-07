@@ -34,6 +34,11 @@ Python project names include uv projects with a double-quoted `name`
 in `pyproject.toml`, including from nested directories. Activating a virtual
 environment alone does not add a project name.
 
+Project metadata detection uses simple text matching, not full JSON or TOML
+parsing. Use double-quoted names; files containing multiple matching `name`
+entries may display multiple names. Git status is provided by Oh My Zsh,
+including its asynchronous prompt support.
+
 ## Installation
 
 Download the latest released theme into the Oh My Zsh custom themes directory:
@@ -64,6 +69,7 @@ For development or tracking `main`, clone the repository and link the theme:
 
 ```sh
 git clone https://github.com/Hietan/Hietan_ZshTheme.git
+mkdir -p "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
 ln -s "$PWD/Hietan_ZshTheme/hietan.zsh-theme" \
   "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/hietan.zsh-theme"
 ```
@@ -76,10 +82,14 @@ The theme selects a color scheme from the terminal environment:
 | --- | --- |
 | `CODEX_SHELL=1` | Light |
 | `TERM_PROGRAM=iTerm.app` | Dark |
+| `TERM_PROGRAM=Apple_Terminal` (macOS Terminal) | `HIETAN_COLOR_SCHEME`, defaulting to dark |
 | Otherwise | `HIETAN_COLOR_SCHEME`, defaulting to dark |
 
-Codex takes priority if both detection variables are present. In another
-terminal, select a scheme before Oh My Zsh is loaded:
+These rules identify the terminal application; they do not query its actual
+background, the macOS appearance, or changes to the active terminal profile.
+Codex takes priority over `TERM_PROGRAM` and manual settings. iTerm2 always
+selects dark. For macOS Terminal or another terminal, select the scheme that
+matches your profile before Oh My Zsh is loaded:
 
 ```sh
 HIETAN_COLOR_SCHEME="light"
@@ -101,9 +111,11 @@ referenced names such as `COLOR_TEXT`, `STATUS`, `TIME`, or `project_name` must
 use their `HIETAN_*` or `hietan_*` equivalents. Standard Oh My Zsh installation
 and `ZSH_THEME="hietan"` configuration are unchanged.
 
+## Migrating from 2.0
+
 The Python project segment now uses `HIETAN_UV`, `HIETAN_UV_NAME`, and
-`HIETAN_UV_ICON` in place of the previous `HIETAN_RYE*` variables. Detection
-uses `pyproject.toml` and does not require the uv command or a `uv.lock` file.
+`HIETAN_UV_ICON` as the preferred names. The previous `HIETAN_RYE*` variables
+remain available as compatibility aliases in 2.x. Detection uses `pyproject.toml` and does not require the uv command or a `uv.lock` file.
 
 ## Development
 

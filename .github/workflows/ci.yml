@@ -18,12 +18,16 @@ concurrency:
 jobs:
   test:
     name: Zsh checks
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
 
       - name: Install Zsh
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install --yes zsh

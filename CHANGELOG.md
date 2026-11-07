@@ -7,13 +7,26 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-08
+
+### Added
+
+- Explicit macOS Terminal detection via `TERM_PROGRAM=Apple_Terminal`,
+  defaulting to dark while respecting `HIETAN_COLOR_SCHEME`.
+
 ### Changed
 
-- Rename the Python project segment from Rye (`HIETAN_RYE*`) to uv (`HIETAN_UV*`).
+- Use uv (`HIETAN_UV*`) for the Python project segment while retaining
+  `HIETAN_RYE*` compatibility aliases for 2.x customizations.
 
 ### Fixed
 
 - Initialize the Git prompt before Oh My Zsh registers asynchronous handlers.
+- Render project and environment names as data, preventing shell command
+  substitution and prompt-format injection.
+- Create the custom themes directory in the Git installation instructions.
+- Include linked documentation and behavior tests in release bundles.
+- Run behavior checks on both Linux and macOS.
 
 ## [2.0.0] - 2026-08-05
 
@@ -60,7 +73,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 - First stable theme release.
 
-[Unreleased]: https://github.com/Hietan/Hietan_ZshTheme/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/Hietan/Hietan_ZshTheme/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/Hietan/Hietan_ZshTheme/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/Hietan/Hietan_ZshTheme/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/Hietan/Hietan_ZshTheme/releases/tag/v1.1.1
 [1.1.0]: https://github.com/Hietan/Hietan_ZshTheme/releases/tag/v1.1

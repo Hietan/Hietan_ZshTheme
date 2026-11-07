@@ -62,6 +62,18 @@ env -u CODEX_SHELL TERM_PROGRAM=iTerm.app zsh -fc \
   'source "$1"; [[ $HIETAN_COLOR_SCHEME == dark ]]' _ "$theme_file" || \
   fail "iTerm should select dark mode"
 
+env -u CODEX_SHELL -u HIETAN_COLOR_SCHEME TERM_PROGRAM=Apple_Terminal zsh -fc \
+  'source "$1"; [[ $HIETAN_COLOR_SCHEME == dark ]]' _ "$theme_file" || \
+  fail "Apple Terminal should default to dark mode"
+
+env -u CODEX_SHELL HIETAN_COLOR_SCHEME=light TERM_PROGRAM=Apple_Terminal zsh -fc \
+  'source "$1"; [[ $HIETAN_COLOR_SCHEME == light ]]' _ "$theme_file" || \
+  fail "Apple Terminal should accept a light profile override"
+
+env CODEX_SHELL=1 TERM_PROGRAM=Apple_Terminal zsh -fc \
+  'source "$1"; [[ $HIETAN_COLOR_SCHEME == light ]]' _ "$theme_file" || \
+  fail "Codex should take priority over Apple Terminal"
+
 CONDA_DEFAULT_ENV=test-env
 hietan_precmd
 assert_equal "$HIETAN_ANACONDA" "$HIETAN_ANACONDA_ICON test-env" \
@@ -88,12 +100,36 @@ assert_equal "$HIETAN_UV_NAME" python-demo "Python project name"
 assert_equal "$HIETAN_NPM" "$HIETAN_NPM_ICON node-demo" "npm segment"
 assert_equal "$HIETAN_CARGO" "$HIETAN_CARGO_ICON cargo-demo" "Cargo segment"
 assert_equal "$HIETAN_UV" "$HIETAN_UV_ICON python-demo" "Python segment"
+assert_equal "$HIETAN_RYE_NAME" "$HIETAN_UV_NAME" "legacy Python name alias"
+assert_equal "$HIETAN_RYE" "$HIETAN_UV" "legacy Python segment alias"
 assert_contains "$PROMPT" "${HIETAN_START}%f%k " "uncolored input space"
+
+rm "$test_dir/project/uv.lock"
+hietan_precmd
+assert_equal "$HIETAN_UV_NAME" python-demo "Python detection without uv.lock"
+
+# Repository metadata and environment names must never execute at render time.
+print -r -- 'name = "$(touch command-marker)`touch backtick-marker`%F{red}uv"' \
+  > "$test_dir/project/pyproject.toml"
+CONDA_DEFAULT_ENV='$(touch conda-marker)%F{blue}env'
+function git_prompt_info { :; }
+function git_prompt_status { :; }
+setopt PROMPT_SUBST
+hietan_precmd
+rendered_prompt=$(print -P -- "$PROMPT")
+assert_contains "$rendered_prompt" '$(touch command-marker)`touch backtick-marker`%F{red}uv' \
+  "project name rendered literally"
+assert_contains "$rendered_prompt" '$(touch conda-marker)%F{blue}env' \
+  "environment name rendered literally"
+[[ ! -e command-marker && ! -e backtick-marker && ! -e conda-marker ]] || \
+  fail "metadata executed a command"
+unset CONDA_DEFAULT_ENV
 
 mkdir -p "$test_dir/empty"
 cd "$test_dir/empty"
 hietan_precmd
 assert_equal "$HIETAN_UV" '' "Python segment cleared outside project"
+assert_equal "$HIETAN_RYE" '' "legacy Python segment cleared outside project"
 assert_equal "$HIETAN_NPM" '' "npm segment cleared outside project"
 assert_equal "$HIETAN_CARGO" '' "Cargo segment cleared outside project"
 

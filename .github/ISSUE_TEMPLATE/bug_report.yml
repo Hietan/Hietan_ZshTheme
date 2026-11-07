@@ -12,7 +12,7 @@ body:
     attributes:
       label: Theme version
       description: Release version or Git commit.
-      placeholder: v2.0.0
+      placeholder: v2.1.0
     validations:
       required: true
   - type: input

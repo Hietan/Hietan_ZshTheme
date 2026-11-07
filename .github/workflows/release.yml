@@ -38,7 +38,10 @@ jobs:
           version=${GITHUB_REF_NAME#v}
           bundle="hietan-zsh-theme-$version"
           mkdir "$bundle"
-          cp hietan.zsh-theme README.md CHANGELOG.md LICENSE NOTICE "$bundle/"
+          cp hietan.zsh-theme README.md CHANGELOG.md LICENSE NOTICE \
+            CONTRIBUTING.md RELEASE.md SECURITY.md SUPPORT.md MAINTAINERS.md \
+            CODE_OF_CONDUCT.md "$bundle/"
+          cp -R tests "$bundle/"
           tar -czf "$bundle.tar.gz" "$bundle"
           zip -qr "$bundle.zip" "$bundle"
           sha256sum \
